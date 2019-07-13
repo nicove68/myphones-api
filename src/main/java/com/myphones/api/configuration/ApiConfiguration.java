@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
+import com.myphones.api.model.dto.ImportFileRegisterDTO;
 import com.myphones.api.model.dto.MobileNumberDTO;
 
 
@@ -55,6 +56,15 @@ public class ApiConfiguration implements WebMvcConfigurer {
   public Cache<Long, MobileNumberDTO> mobileNumberCache() {
     return cacheManager().createCache("mobile_number",
         CacheConfigurationBuilder.newCacheConfigurationBuilder(Long.class, MobileNumberDTO.class, ResourcePoolsBuilder.heap(5000))
+            .withExpiry(ExpiryPolicyBuilder.timeToLiveExpiration(Duration.ofMinutes(5)))
+            .build()
+    );
+  }
+
+  @Bean
+  public Cache<Long, ImportFileRegisterDTO> importFileRegisterCache() {
+    return cacheManager().createCache("import_file_register",
+        CacheConfigurationBuilder.newCacheConfigurationBuilder(Long.class, ImportFileRegisterDTO.class, ResourcePoolsBuilder.heap(5000))
             .withExpiry(ExpiryPolicyBuilder.timeToLiveExpiration(Duration.ofMinutes(5)))
             .build()
     );

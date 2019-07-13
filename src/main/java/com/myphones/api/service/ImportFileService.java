@@ -12,12 +12,14 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.ehcache.Cache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.myphones.api.exception.ResourceNotFoundException;
 import com.myphones.api.model.dto.ImportFileRegisterDTO;
 import com.myphones.api.model.entity.ImportFileRegister;
 import com.myphones.api.model.entity.MobileNumber;
@@ -37,13 +39,15 @@ public class ImportFileService {
   private ImportFileRegisterRepository importFileRegisterRepository;
   private MobileNumberRepository mobileNumberRepository;
   private ImportFileRegisterTransformer importFileRegisterTransformer;
+  private Cache<Long, ImportFileRegisterDTO> importFileRegisterCache;
 
 
   @Autowired
-  public ImportFileService(ImportFileRegisterRepository importFileRegisterRepository, MobileNumberRepository mobileNumberRepository, ImportFileRegisterTransformer importFileRegisterTransformer) {
+  public ImportFileService(ImportFileRegisterRepository importFileRegisterRepository, MobileNumberRepository mobileNumberRepository, ImportFileRegisterTransformer importFileRegisterTransformer, Cache<Long, ImportFileRegisterDTO> importFileRegisterCache) {
     this.importFileRegisterRepository = importFileRegisterRepository;
     this.mobileNumberRepository = mobileNumberRepository;
     this.importFileRegisterTransformer = importFileRegisterTransformer;
+    this.importFileRegisterCache = importFileRegisterCache;
   }
 
   public ImportFileRegisterDTO importFile(MultipartFile file) {
@@ -122,4 +126,37 @@ public class ImportFileService {
     return Optional.empty();
   }
 
+  public List<ImportFileRegisterDTO> getAllImportFileRegisters() {
+    LOGGER.info("Getting all import file registers...");
+
+    List<ImportFileRegister> fileRegisterList = importFileRegisterRepository.findAll();
+
+    return fileRegisterList.stream()
+        .map(ImportFileRegisterTransformer::convertToBasicImportFileRegisterDTO)
+        .collect(Collectors.toList());
+  }
+
+  public ImportFileRegisterDTO getImportFileRegister(Long importFileRegisterId) {
+
+    if (importFileRegisterCache.containsKey(importFileRegisterId)) {
+      LOGGER.info("Cache hit for import file register id: " + importFileRegisterId);
+      return importFileRegisterCache.get(importFileRegisterId);
+    }
+
+    ImportFileRegister importFileRegister = getImportFileRegisterFromRepository(importFileRegisterId);
+
+    ImportFileRegisterDTO importFileRegisterDTO = ImportFileRegisterTransformer.convertToImportFileRegisterDTO(importFileRegister);
+
+    importFileRegisterCache.put(importFileRegisterId, importFileRegisterDTO);
+
+    return importFileRegisterDTO;
+  }
+
+  private ImportFileRegister getImportFileRegisterFromRepository(Long importFileRegisterId) {
+    LOGGER.info("Find import file register with id: " + importFileRegisterId);
+
+    Optional<ImportFileRegister> importFileRegister = importFileRegisterRepository.findImportFileRegisterById(importFileRegisterId);
+
+    return importFileRegister.orElseThrow(ResourceNotFoundException::new);
+  }
 }

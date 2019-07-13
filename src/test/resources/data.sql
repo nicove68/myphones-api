@@ -17,7 +17,7 @@ DROP TABLE IF EXISTS mobile_number;
 
 CREATE TABLE mobile_number (
     id INT AUTO_INCREMENT  PRIMARY KEY,
-    number VARCHAR(20) NOT NULL,
+    number VARCHAR(50) NOT NULL,
     status VARCHAR(20) NOT NULL,
     validation_comment VARCHAR(250) DEFAULT NULL,
     import_file_register_id INT NOT NULL
