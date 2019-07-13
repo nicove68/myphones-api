@@ -20,6 +20,7 @@ import com.myphones.api.transformer.MobileNumberTransformer;
 public class MobileNumberService {
 
   private static Logger LOGGER = LoggerFactory.getLogger(MobileNumberService.class);
+
   private MobileNumberRepository mobileNumberRepository;
   private Cache<Long, MobileNumberDTO> mobileNumberCache;
 

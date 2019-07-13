@@ -212,17 +212,16 @@ List of possible improvements:
 - [ ] Caché implementation
 - [ ] Validate mejor los numeros
 paginar respouesta de numeros
+agregar filtrado a los numeros
 
 
 ## Documentation
 
 Baeldung is my best friend :D
 
-- [Entity to DTO using ModelMapper](https://www.baeldung.com/entity-to-and-from-dto-for-a-java-spring-application)
 - [H2 Database in memory](https://www.baeldung.com/spring-boot-h2-database)
 - [Restful basics](https://www.baeldung.com/building-a-restful-web-service-with-spring-and-java-based-configuration)
 - [Reentrant Locking](https://www.baeldung.com/java-concurrent-locks)
 
 https://www.baeldung.com/java-csv-file-array
 https://www.baeldung.com/java-check-string-number
-https://www.baeldung.com/java-pairs

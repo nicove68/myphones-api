@@ -22,6 +22,7 @@ public class MobileNumberController extends BaseController {
     this.mobileNumberService = mobileNumberService;
   }
 
+
   @GetMapping
   public List<MobileNumberDTO> getAllMobileNumbers() {
 
@@ -33,5 +34,4 @@ public class MobileNumberController extends BaseController {
 
     return mobileNumberService.getMobileNumber(mobileNumberId);
   }
-
 }

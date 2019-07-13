@@ -38,15 +38,13 @@ public class ImportFileService {
 
   private ImportFileRegisterRepository importFileRegisterRepository;
   private MobileNumberRepository mobileNumberRepository;
-  private ImportFileRegisterTransformer importFileRegisterTransformer;
   private Cache<Long, ImportFileRegisterDTO> importFileRegisterCache;
 
 
   @Autowired
-  public ImportFileService(ImportFileRegisterRepository importFileRegisterRepository, MobileNumberRepository mobileNumberRepository, ImportFileRegisterTransformer importFileRegisterTransformer, Cache<Long, ImportFileRegisterDTO> importFileRegisterCache) {
+  public ImportFileService(ImportFileRegisterRepository importFileRegisterRepository, MobileNumberRepository mobileNumberRepository, Cache<Long, ImportFileRegisterDTO> importFileRegisterCache) {
     this.importFileRegisterRepository = importFileRegisterRepository;
     this.mobileNumberRepository = mobileNumberRepository;
-    this.importFileRegisterTransformer = importFileRegisterTransformer;
     this.importFileRegisterCache = importFileRegisterCache;
   }
 
