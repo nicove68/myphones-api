@@ -24,9 +24,7 @@ $ mvn spring-boot:run
 ```
 SpringBoot application up in port 5000, check health endpoint:
 
-```
-http://localhost:5000/myphones-api/actuator/health
-```
+    GET http://localhost:5000/myphones-api/actuator/health
 
 ## Run the tests
 
