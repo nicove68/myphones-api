@@ -9,6 +9,7 @@ In this API you can create new bank account, deposit and withdraw money, see acc
 - Maven
 - SpringBoot
 - H2 Database (in memory)
+- EhCache
 
 #### Requirements
 

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.ehcache.Cache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,11 +22,13 @@ public class MobileNumberService {
   private static Logger LOGGER = LoggerFactory.getLogger(MobileNumberService.class);
   private MobileNumberRepository mobileNumberRepository;
   private MobileNumberTransformer mobileNumberTransformer;
+  private Cache<Long, MobileNumberDTO> mobileNumberCache;
 
   @Autowired
-  public MobileNumberService(MobileNumberRepository mobileNumberRepository, MobileNumberTransformer mobileNumberTransformer) {
+  public MobileNumberService(MobileNumberRepository mobileNumberRepository, MobileNumberTransformer mobileNumberTransformer, Cache<Long, MobileNumberDTO> mobileNumberCache) {
     this.mobileNumberRepository = mobileNumberRepository;
     this.mobileNumberTransformer = mobileNumberTransformer;
+    this.mobileNumberCache = mobileNumberCache;
   }
 
   public List<MobileNumberDTO> getAllMobileNumbers() {
@@ -40,9 +43,18 @@ public class MobileNumberService {
 
   public MobileNumberDTO getMobileNumber(Long mobileNumberId) {
 
+    if (mobileNumberCache.containsKey(mobileNumberId)) {
+      LOGGER.info("Cache hit for mobile number id: " + mobileNumberId);
+      return mobileNumberCache.get(mobileNumberId);
+    }
+
     MobileNumber mobileNumber = getMobileNumberFromRepository(mobileNumberId);
 
-    return mobileNumberTransformer.convertToDto(mobileNumber);
+    MobileNumberDTO mobileNumberDTO = mobileNumberTransformer.convertToDto(mobileNumber);
+
+    mobileNumberCache.put(mobileNumberId, mobileNumberDTO);
+
+    return mobileNumberDTO;
   }
 
   private MobileNumber getMobileNumberFromRepository(Long mobileNumberId) {
