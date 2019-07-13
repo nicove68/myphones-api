@@ -6,10 +6,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.ehcache.Cache;
@@ -100,7 +100,15 @@ public class ImportFileService {
     List<MobileNumber> existentMobileNumbers = mobileNumberRepository.findByIdIn(mobileNumberIds);
     List<Long> existentMobileNumberIds = existentMobileNumbers.stream().map(MobileNumber::getId).collect(Collectors.toList());
 
-    return mobileNumbers.stream().filter(num -> !existentMobileNumberIds.contains(num.getId())).collect(Collectors.toList());
+    return mobileNumbers.stream()
+        .filter(num -> !existentMobileNumberIds.contains(num.getId()))
+        .filter(distinctByKey(MobileNumber::getId))
+        .collect(Collectors.toList());
+  }
+
+  private static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
+    Set<Object> seen = ConcurrentHashMap.newKeySet();
+    return t -> seen.add(keyExtractor.apply(t));
   }
 
   private Optional<MobileNumber> lineToMobileNumber(String line) {
