@@ -6,7 +6,6 @@ import javax.persistence.*;
 public class MobileNumber {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   private String number;
@@ -17,17 +16,16 @@ public class MobileNumber {
   private String validationComment;
 
   @ManyToOne
-  @JoinColumn(name = "import_file_register_id", nullable = false)
   private ImportFileRegister importFileRegister;
 
   public MobileNumber() {
   }
 
-  public MobileNumber(String number, MobileNumberStatus status, String validationComment, ImportFileRegister importFileRegister) {
+  public MobileNumber(Long id, String number, MobileNumberStatus status, String validationComment) {
+    this.id = id;
     this.number = number;
     this.status = status;
     this.validationComment = validationComment;
-    this.importFileRegister = importFileRegister;
   }
 
   public Long getId() {

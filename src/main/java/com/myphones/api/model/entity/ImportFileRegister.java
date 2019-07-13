@@ -1,20 +1,23 @@
 package com.myphones.api.model.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.*;
 
 @Entity
 public class ImportFileRegister {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
 
   private String importedDate;
 
   private String fileName;
+
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "importFileRegister", orphanRemoval = true)
+  private List<MobileNumber> numbers = new ArrayList<>();
 
   public ImportFileRegister() {
   }
@@ -46,5 +49,14 @@ public class ImportFileRegister {
 
   public void setFileName(String fileName) {
     this.fileName = fileName;
+  }
+
+  public List<MobileNumber> getNumbers() {
+    return numbers;
+  }
+
+  public void addNumber(MobileNumber mobileNumber) {
+    numbers.add(mobileNumber);
+    mobileNumber.setImportFileRegister(this);
   }
 }

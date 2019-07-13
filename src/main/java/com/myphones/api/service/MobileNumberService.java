@@ -21,13 +21,11 @@ public class MobileNumberService {
 
   private static Logger LOGGER = LoggerFactory.getLogger(MobileNumberService.class);
   private MobileNumberRepository mobileNumberRepository;
-  private MobileNumberTransformer mobileNumberTransformer;
   private Cache<Long, MobileNumberDTO> mobileNumberCache;
 
   @Autowired
-  public MobileNumberService(MobileNumberRepository mobileNumberRepository, MobileNumberTransformer mobileNumberTransformer, Cache<Long, MobileNumberDTO> mobileNumberCache) {
+  public MobileNumberService(MobileNumberRepository mobileNumberRepository, Cache<Long, MobileNumberDTO> mobileNumberCache) {
     this.mobileNumberRepository = mobileNumberRepository;
-    this.mobileNumberTransformer = mobileNumberTransformer;
     this.mobileNumberCache = mobileNumberCache;
   }
 
@@ -37,7 +35,7 @@ public class MobileNumberService {
     List<MobileNumber> mobileNumberList = mobileNumberRepository.findAll();
 
     return mobileNumberList.stream()
-        .map(mobileNumberTransformer::convertToDto)
+        .map(MobileNumberTransformer::convertToMobileNumberDTO)
         .collect(Collectors.toList());
   }
 
@@ -50,7 +48,7 @@ public class MobileNumberService {
 
     MobileNumber mobileNumber = getMobileNumberFromRepository(mobileNumberId);
 
-    MobileNumberDTO mobileNumberDTO = mobileNumberTransformer.convertToDto(mobileNumber);
+    MobileNumberDTO mobileNumberDTO = MobileNumberTransformer.convertToMobileNumberDTO(mobileNumber);
 
     mobileNumberCache.put(mobileNumberId, mobileNumberDTO);
 

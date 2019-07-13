@@ -13,4 +13,5 @@ public interface MobileNumberRepository extends CrudRepository<MobileNumber, Lon
 
   Optional<MobileNumber> findMobileNumberById(Long mobileNumberId);
   List<MobileNumber> findAll();
+  List<MobileNumber> findByIdIn(List<Long> mobileNumberIds);
 }

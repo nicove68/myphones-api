@@ -21,6 +21,12 @@ public class ImportFileRegisterDTO {
     this.numbers = numbers;
   }
 
+  public ImportFileRegisterDTO(Long id, String importedDate, String fileName) {
+    this.id = id;
+    this.importedDate = importedDate;
+    this.fileName = fileName;
+  }
+
   public Long getId() {
     return id;
   }

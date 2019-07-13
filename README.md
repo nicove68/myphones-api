@@ -210,6 +210,8 @@ List of possible improvements:
 - [ ] Write unit tests for all classes
 - [ ] Building a deployment process
 - [ ] Caché implementation
+- [ ] Validate mejor los numeros
+paginar respouesta de numeros
 
 
 ## Documentation
@@ -220,3 +222,7 @@ Baeldung is my best friend :D
 - [H2 Database in memory](https://www.baeldung.com/spring-boot-h2-database)
 - [Restful basics](https://www.baeldung.com/building-a-restful-web-service-with-spring-and-java-based-configuration)
 - [Reentrant Locking](https://www.baeldung.com/java-concurrent-locks)
+
+https://www.baeldung.com/java-csv-file-array
+https://www.baeldung.com/java-check-string-number
+https://www.baeldung.com/java-pairs

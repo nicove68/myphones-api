@@ -2,7 +2,6 @@ package com.myphones.api.configuration;
 
 
 import java.time.Duration;
-import java.util.Collection;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -12,7 +11,6 @@ import org.ehcache.config.builders.CacheConfigurationBuilder;
 import org.ehcache.config.builders.CacheManagerBuilder;
 import org.ehcache.config.builders.ExpiryPolicyBuilder;
 import org.ehcache.config.builders.ResourcePoolsBuilder;
-import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -46,11 +44,6 @@ public class ApiConfiguration implements WebMvcConfigurer {
   @Bean
   public ExecutorService executorService() {
     return Executors.newCachedThreadPool();
-  }
-
-  @Bean
-  public ModelMapper modelMapper() {
-    return new ModelMapper();
   }
 
   @Bean

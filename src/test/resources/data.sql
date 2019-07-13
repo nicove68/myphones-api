@@ -19,17 +19,17 @@ CREATE TABLE mobile_number (
     id INT AUTO_INCREMENT  PRIMARY KEY,
     number VARCHAR(20) NOT NULL,
     status VARCHAR(20) NOT NULL,
-    status_comment VARCHAR(250) NULLABLE,
+    validation_comment VARCHAR(250) DEFAULT NULL,
     import_file_register_id INT NOT NULL
 );
 
-INSERT INTO mobile_number (number, status, status_comment, import_file_register_id) VALUES
-    ('666123', 'VALID', null, 1),
-    ('766123', 'VALID', null, 1),
-    ('866123', 'VALID', null, 1),
-    ('888888', 'VALID', null, 2),
+INSERT INTO mobile_number (number, status, validation_comment, import_file_register_id) VALUES
+    ('666123', 'VALID', NULL, 1),
+    ('766123', 'VALID', NULL, 1),
+    ('866123', 'VALID', NULL, 1),
+    ('888888', 'VALID', NULL, 2),
     ('996123', 'INVALID', 'Starts with incorrect number', 2),
-    ('667979', 'VALID', null, 3),
+    ('667979', 'VALID', NULL, 3),
     ('669877', 'FIXED', 'Remove incorrect words', 3),
     ('7878787878', 'INVALID', 'Incorrect length', 3);
 
