@@ -1,7 +1,7 @@
-# MyBank-API
+# MyPhones-API
 
-Basic API Rest for bank operations.
-In this API you can create new bank account, deposit and withdraw money, see account balance and see account transaction movements. 
+Basic API Rest for import mobile phones from CSV file.
+In this API you can import phones, view import statistics and view mobile phone items. 
 
 #### Technology stack
 
@@ -19,163 +19,102 @@ In this API you can create new bank account, deposit and withdraw money, see acc
 ## Run the application
 
 ```
-$ cd mybank-api
+$ cd myphones-api
 $ mvn spring-boot:run
 ```
 SpringBoot application up in port 5000, check health endpoint:
 
 ```
-http://localhost:5000/mybank-api/actuator/health
+http://localhost:5000/myphones-api/actuator/health
 ```
 
 ## Run the tests
 
 ```
-$ cd mybank-api
+$ cd myphones-api
 $ mvn test
 ```
 
 
 ## API
 
-#### Bank account endpoints index:
+For SouthAfrican mobile phones validation was used this rules:
+  - Only numbers
+  - Numbers with max length: 11 digits
+  - Numbers must start with 6, 7 or 8
 
-  - [Create Bank Account](#create_bank_account)
-  - [Get Bank Account Balance](#get_bank_account_balance)
-  - [Get Bank Account Detail](#get_bank_account_detail)
-  - [Get All Bank Accounts](#get_all_bank_accounts)
+#### Import File Register endpoints index:
+
+  - [Import data from CSV file](#import_data_from_csv_file)
+  - [Get all import file registers](#get_all_import_file_registers)
+  - [Get import file register detail](#get_import_file_register_detail)
   
-#### Bank transaction endpoints index:
-  - [Create Bank Transaction](#create_bank_transaction)
-  - [Get All Bank Account Transactions](#get_all_bank_account_transactions)
+#### Mobile Numbers endpoints index:
+  - [Get all mobile numbers](#get_all_mobile_numbers)
+  - [Get mobile number detail](#get_mobile_number_detail)
 
 
-### Bank Account endpoints
+### Import File Register endpoints
 
-<a name="create_bank_account"></a>
-#### Create Bank Account
+<a name="import_data_from_csv_file"></a>
+#### Import data from CSV file
 
-    POST http://localhost:5000/mybank-api/bank_accounts
+    POST http://localhost:5000/myphones-api/mobile_numbers/import_files
     
 ##### Request
 
-``` json
-{
-    "alias" : "liomessi",
-    "type" : "BLACK"
-}
-```
+Generate request param form-data (MultipartFile) with key: "file" and value: "the csv file"
 
 ##### Response
 
 ``` json
 {
     "id": 1,
-    "alias": "liomessi",
-    "type": "BLACK",
-    "balance": 0
+    "imported_date": "2019-07-13T19:13:55Z",
+    "file_name": "magic_numbers.csv",
+    "statistics": {
+        "valid_numbers": 2,
+        "fixed_numbers": 0,
+        "invalid_numbers": 3,
+        "total_numbers": 5
+    },
+    "numbers": [
+        {
+            "id": 1,
+            "number": "6478342944",
+            "status": "VALID"
+        },
+        {
+            "id": 2,
+            "number": "84528784843",
+            "status": "VALID"
+        },
+        {
+            "id": 3,
+            "number": "263716791426",
+            "status": "INVALID",
+            "validation_comment": "Is not a number || has not valid length || not start with correct number"
+        },
+        {
+            "id": 4,
+            "number": "27736529279",
+            "status": "INVALID",
+            "validation_comment": "Is not a number || has not valid length || not start with correct number"
+        },
+        {
+            "id": 5,
+            "number": "27718159078",
+            "status": "INVALID",
+            "validation_comment": "Is not a number || has not valid length || not start with correct number"
+        }
+    ]
 }
 ```
 
-<a name="get_bank_account_balance"></a>
-#### Get Bank Account Balance
+<a name="get_all_import_file_registers"></a>
+#### Get all import file registers
 
-    GET http://localhost:5000/mybank-api/bank_accounts/{account_id}/balance
-    
-##### Response
-
-``` json
-{
-  "balance": 80999.45
-}
-```
-
-<a name="get_bank_account_detail"></a>
-#### Get Bank Account Detail
-
-    GET http://localhost:5000/mybank-api/bank_accounts/{account_id}
-    
-##### Response
-
-``` json
-{
-    "id": 1,
-    "alias": "liomessi",
-    "type": "BLACK",
-    "balance": 80999.45
-}
-```
-
-<a name="get_all_bank_accounts"></a>
-#### Get All Bank Accounts
-
-    GET http://localhost:5000/mybank-api/bank_accounts
-    
-##### Response
-
-``` json
-[
-  {
-    "id": 1,
-    "alias": "liomessi",
-    "type": "BLACK",
-    "balance": 80999.45
-  },
-  {
-    "id": 2,
-    "alias": "ronaldo",
-    "type": "STANDARD",
-    "balance": 0
-  },
-  {
-    "id": 3,
-    "alias": "pogba",
-    "type": "PLATINUM",
-    "balance": 3007.77
-  }
-]
-```
-
-### Bank Transaction endpoints
-
-<a name="create_bank_transaction"></a>
-#### Create Bank Transaction
-
-    POST http://localhost:5000/mybank-api/bank_accounts/{account_id}/transactions
-    
-##### Request for DEPOSIT
-
-``` json
-{
-	"type":"DEPOSIT",
-	"amount": 10
-}
-```
-
-##### Request for WITHDRAW
-
-``` json
-{
-	"type":"WITHDRAW",
-	"amount": 10
-}
-```
-
-##### Response
-
-``` json
-{
-    "id": 1,
-    "date": "2019-07-01T20:59:48Z",
-    "type": "DEPOSIT",
-    "amount": 10
-}
-```
-
-<a name="get_all_bank_account_transactions"></a>
-#### Get All Bank Account Transactions
-
-    GET http://localhost:5000/mybank-api/bank_accounts/{account_id}/transactions
+    GET http://localhost:5000/myphones-api/mobile_numbers/import_files
     
 ##### Response
 
@@ -183,36 +122,142 @@ $ mvn test
 [
   {
     "id": 1,
-    "date": "2010-01-01T16:00:00Z",
-    "type": "DEPOSIT",
-    "amount": 80000
+    "imported_date": "2019-07-10T19:13:55Z",
+    "file_name": "magic_numbers.csv"
   },
   {
     "id": 2,
-    "date": "2010-01-01T16:00:00Z",
-    "type": "DEPOSIT",
-    "amount": 990
-  },
+    "imported_date": "2019-07-11T22:13:55Z",
+    "file_name": "southafrica_numbers.csv"
+  }
   {
     "id": 3,
-    "date": "2010-01-01T16:00:00Z",
-    "type": "WITHDRAW",
-    "amount": 90
+    "imported_date": "2019-07-12T08:13:55Z",
+    "file_name": "today_numbers.csv"
   }
 ]
 ```
 
-## Todo
+<a name="get_import_file_register_detail"></a>
+#### Get import file register detail
+
+    GET http://localhost:5000/myphones-api/mobile_numbers/import_files/{import_file_register_id}
+    
+##### Response
+
+``` json
+{
+    "id": 1,
+    "imported_date": "2019-07-13T19:13:55Z",
+    "file_name": "magic_numbers.csv",
+    "statistics": {
+        "valid_numbers": 2,
+        "fixed_numbers": 0,
+        "invalid_numbers": 3,
+        "total_numbers": 5
+    },
+    "numbers": [
+        {
+            "id": 1,
+            "number": "6478342944",
+            "status": "VALID"
+        },
+        {
+            "id": 2,
+            "number": "84528784843",
+            "status": "VALID"
+        },
+        {
+            "id": 3,
+            "number": "263716791426",
+            "status": "INVALID",
+            "validation_comment": "Is not a number || has not valid length || not start with correct number"
+        },
+        {
+            "id": 4,
+            "number": "27736529279",
+            "status": "INVALID",
+            "validation_comment": "Is not a number || has not valid length || not start with correct number"
+        },
+        {
+            "id": 5,
+            "number": "27718159078",
+            "status": "INVALID",
+            "validation_comment": "Is not a number || has not valid length || not start with correct number"
+        }
+    ]
+}
+```
+
+
+
+### Mobile Numbers endpoints
+
+<a name="get_all_mobile_numbers"></a>
+#### Get all mobile numbers
+
+    GET http://localhost:5000/myphones-api/mobile_numbers
+
+##### Response
+
+``` json
+[
+  {
+    "id": 1,
+    "number": "6478342944",
+    "status": "VALID"
+  },
+  {
+    "id": 2,
+    "number": "84528784843",
+    "status": "VALID"
+  },
+  {
+    "id": 3,
+    "number": "263716791426",
+    "status": "INVALID",
+    "validation_comment": "Is not a number || has not valid length || not start with correct number"
+  },
+  {
+    "id": 4,
+    "number": "27736529279",
+    "status": "INVALID",
+    "validation_comment": "Is not a number || has not valid length || not start with correct number"
+  },
+  {
+    "id": 5,
+    "number": "27718159078",
+    "status": "INVALID",
+    "validation_comment": "Is not a number || has not valid length || not start with correct number"
+  }
+]
+```
+
+<a name="get_mobile_number_detail"></a>
+#### Get mobile number detail
+
+    GET http://localhost:5000/myphones-api/mobile_numbers/{mobile_number_id}
+    
+##### Response
+
+``` json
+{
+  "id": 1,
+  "number": "6478342944",
+  "status": "VALID"
+}
+```
+
+## ToDo
 
 List of possible improvements:
 
 - [ ] Securize API with user authentication
 - [ ] Write unit tests for all classes
 - [ ] Building a deployment process
-- [ ] Caché implementation
-- [ ] Validate mejor los numeros
-paginar respouesta de numeros
-agregar filtrado a los numeros
+- [ ] Analize SouthAfrican correct validation number and improve validation
+- [ ] Paginate list responses
+- [ ] Add filters in list responses
 
 
 ## Documentation
@@ -221,7 +266,5 @@ Baeldung is my best friend :D
 
 - [H2 Database in memory](https://www.baeldung.com/spring-boot-h2-database)
 - [Restful basics](https://www.baeldung.com/building-a-restful-web-service-with-spring-and-java-based-configuration)
-- [Reentrant Locking](https://www.baeldung.com/java-concurrent-locks)
-
-https://www.baeldung.com/java-csv-file-array
-https://www.baeldung.com/java-check-string-number
+- [CSV file](https://www.baeldung.com/java-csv-file-array)
+- [Check string number](https://www.baeldung.com/java-check-string-number)
